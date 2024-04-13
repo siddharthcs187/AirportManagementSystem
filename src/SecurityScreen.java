@@ -37,12 +37,4 @@ public class SecurityScreen extends JFrame {
         setLocationRelativeTo(null); // Center the window
         setVisible(true);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new SecurityScreen();
-            }
-        });
-    }
 }

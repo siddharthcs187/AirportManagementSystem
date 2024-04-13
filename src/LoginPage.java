@@ -56,10 +56,35 @@ public class LoginPage extends JFrame implements ActionListener {
         char[] passwordChars = passwordField.getPassword();
         String password = new String(passwordChars);
 
-        // Perform login logic here (e.g., check against a database)
-        if (username.equals("admin") && password.equals("password")) {
-            JOptionPane.showMessageDialog(this, "Login successful!");
-        } else {
+        if (username.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter user name", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter password", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (username.equals("admin") && password.equals("admin_password")) {
+            // Close the login page
+            dispose();
+
+            // Open the admin page
+            SwingUtilities.invokeLater(() -> {
+                AdminView adminView = new AdminView();
+                adminView.setVisible(true);
+            });
+        }else if (username.equals("security") && password.equals("security_password")){
+            // Close the login page
+            dispose();
+
+            // Open the security page
+            SwingUtilities.invokeLater(() -> {
+                SecurityScreen securityScreen = new SecurityScreen();
+                securityScreen.setVisible(true);
+            });
+        }else {
             JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
         }
     }
