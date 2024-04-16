@@ -1,18 +1,22 @@
 import javax.swing.*;
 import java.awt.*;
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 import net.proteanit.sql.DbUtils;
 
 public class AdminView extends JFrame {
     private JTabbedPane tabbedPane;
+    private JTextField searchField;
+    private JButton searchButton;
 
     public AdminView() {
-        // Set the FlatDarkLaf look and feel
+        // Set the FlatLaf light theme
         try {
-            UIManager.setLookAndFeel(new FlatDarkLaf());
+            UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (Exception ex) {
-            System.err.println("Failed to initialize FlatDarkLaf look and feel");
+            System.err.println("Failed to initialize FlatLaf");
         }
 
         // Set up the frame
@@ -21,20 +25,28 @@ public class AdminView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the frame
 
-        // Create a content pane with a dark background color
+        // Create a content pane
         JPanel contentPane = new JPanel(new BorderLayout());
-        contentPane.setBackground(new Color(36, 36, 36));
+        contentPane.setBackground(new Color(243, 243, 243));
 
-        // Create a tabbed pane with vertical tabs on the left
-        tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-        tabbedPane.setBackground(new Color(36, 36, 36));
-        tabbedPane.setForeground(Color.WHITE);
+        // Add search bar components
+        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        searchField = new JTextField(20);
+        searchButton = new JButton("Search");
+        searchBarPanel.add(searchField);
+        searchBarPanel.add(searchButton);
+        contentPane.add(searchBarPanel, BorderLayout.NORTH);
+
+        // Create a tabbed pane with top tabs
+        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane.setBackground(new Color(243, 243, 243));
+        tabbedPane.setForeground(new Color(51, 51, 51));
 
         // Create panels for each view
         JPanel baggagePanel = createBaggagePanel();
         JPanel passengersPanel = createPassengersPanel();
         JPanel flightsPanel = createFlightsPanel();
-        JPanel staffPanel = createStaffPanel();
+        JPanel staffPanel = createStaffPanel(); // Added this line
 
         // Add panels to the tabbed pane
         tabbedPane.addTab("Baggage", baggagePanel);
@@ -47,19 +59,32 @@ public class AdminView extends JFrame {
 
         // Set the content pane for the frame
         setContentPane(contentPane);
+
+        // Attach search button listener
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = searchField.getText();
+                // Perform search operation based on searchText
+                // Update UI if needed
+            }
+        });
     }
 
-    private JPanel createBaggagePanel() {
+    // Other methods (createBaggagePanel, createPassengersPanel, etc.) remain unchanged
+
+
+
+private JPanel createBaggagePanel() {
         JPanel baggagePanel = new JPanel(new BorderLayout());
-        baggagePanel.setBackground(new Color(36, 36, 36));
-        baggagePanel.setForeground(Color.WHITE);
+        baggagePanel.setBackground(new Color(243, 243, 243));
 
         JTable baggageTable = new JTable();
-        baggageTable.setBackground(new Color(36, 36, 36));
-        baggageTable.setForeground(Color.WHITE);
-        baggageTable.setSelectionBackground(new Color(51, 51, 51));
-        baggageTable.setSelectionForeground(Color.WHITE);
-        baggageTable.setGridColor(Color.DARK_GRAY);
+        baggageTable.setBackground(new Color(243, 243, 243));
+        baggageTable.setForeground(new Color(51, 51, 51));
+        baggageTable.setSelectionBackground(new Color(204, 204, 204));
+        baggageTable.setSelectionForeground(new Color(51, 51, 51));
+        baggageTable.setGridColor(new Color(204, 204, 204));
 
         try {
             String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
@@ -89,15 +114,14 @@ public class AdminView extends JFrame {
 
     private JPanel createPassengersPanel() {
         JPanel passengersPanel = new JPanel(new BorderLayout());
-        passengersPanel.setBackground(new Color(36, 36, 36));
-        passengersPanel.setForeground(Color.WHITE);
+        passengersPanel.setBackground(new Color(243, 243, 243));
 
         JTable passengerTable = new JTable();
-        passengerTable.setBackground(new Color(36, 36, 36));
-        passengerTable.setForeground(Color.WHITE);
-        passengerTable.setSelectionBackground(new Color(51, 51, 51));
-        passengerTable.setSelectionForeground(Color.WHITE);
-        passengerTable.setGridColor(Color.DARK_GRAY);
+        passengerTable.setBackground(new Color(243, 243, 243));
+        passengerTable.setForeground(new Color(51, 51, 51));
+        passengerTable.setSelectionBackground(new Color(204, 204, 204));
+        passengerTable.setSelectionForeground(new Color(51, 51, 51));
+        passengerTable.setGridColor(new Color(204, 204, 204));
 
         try {
             String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
@@ -126,15 +150,14 @@ public class AdminView extends JFrame {
 
     private JPanel createFlightsPanel() {
         JPanel flightsPanel = new JPanel(new BorderLayout());
-        flightsPanel.setBackground(new Color(36, 36, 36));
-        flightsPanel.setForeground(Color.WHITE);
+        flightsPanel.setBackground(new Color(243, 243, 243));
 
         JTable flightsTable = new JTable();
-        flightsTable.setBackground(new Color(36, 36, 36));
-        flightsTable.setForeground(Color.WHITE);
-        flightsTable.setSelectionBackground(new Color(51, 51, 51));
-        flightsTable.setSelectionForeground(Color.WHITE);
-        flightsTable.setGridColor(Color.DARK_GRAY);
+        flightsTable.setBackground(new Color(243, 243, 243));
+        flightsTable.setForeground(new Color(51, 51, 51));
+        flightsTable.setSelectionBackground(new Color(204, 204, 204));
+        flightsTable.setSelectionForeground(new Color(51, 51, 51));
+        flightsTable.setGridColor(new Color(204, 204, 204));
 
         try {
             String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
@@ -163,15 +186,14 @@ public class AdminView extends JFrame {
 
     private JPanel createStaffPanel() {
         JPanel staffPanel = new JPanel(new BorderLayout());
-        staffPanel.setBackground(new Color(36, 36, 36));
-        staffPanel.setForeground(Color.WHITE);
+        staffPanel.setBackground(new Color(243, 243, 243));
 
         JTable staffTable = new JTable();
-        staffTable.setBackground(new Color(36, 36, 36));
-        staffTable.setForeground(Color.WHITE);
-        staffTable.setSelectionBackground(new Color(51, 51, 51));
-        staffTable.setSelectionForeground(Color.WHITE);
-        staffTable.setGridColor(Color.DARK_GRAY);
+        staffTable.setBackground(new Color(243, 243, 243));
+        staffTable.setForeground(new Color(51, 51, 51));
+        staffTable.setSelectionBackground(new Color(204, 204, 204));
+        staffTable.setSelectionForeground(new Color(51, 51, 51));
+        staffTable.setGridColor(new Color(204, 204, 204));
 
         try {
             String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
@@ -196,5 +218,13 @@ public class AdminView extends JFrame {
         staffPanel.add(scrollPane, BorderLayout.CENTER);
 
         return staffPanel;
+    }
+
+    public static void main(String[] args) {
+        // Create and display the GUI
+        SwingUtilities.invokeLater(() -> {
+            AdminView adminView = new AdminView();
+            adminView.setVisible(true);
+        });
     }
 }
