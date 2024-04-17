@@ -69,7 +69,7 @@ public class PassengerView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "siddharth";
+            String password = "dbsproject:(";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             // Corrected call string with procedure name and input parameter placeholder
@@ -101,12 +101,10 @@ public class PassengerView extends JFrame {
 
         // Create input fields for passenger details
         JTextField shopIdField = new JTextField(20);
-        JTextField passengerIdField = new JTextField(20);
         JTextField amountField = new JTextField(10);
 
         // Create labels for input fields
         JLabel shopIdLabel = new JLabel("Shop ID:");
-        JLabel passengerIdLabel = new JLabel("Passenger ID:");
         JLabel amountLabel = new JLabel("Amount:");
 
         // Create Buy button
@@ -117,7 +115,6 @@ public class PassengerView extends JFrame {
                 // Call a method or perform actions when Buy button is clicked
                 // Implement the logic here
                 String shopId = shopIdField.getText();
-                String passengerId = passengerIdField.getText();
                 String amount = amountField.getText();
                 try{
                     String url = "jdbc:mysql://localhost:3306/airportdb";
@@ -129,7 +126,7 @@ public class PassengerView extends JFrame {
                     String call = "{call " + procedure + "(?,?,?)}";
                     CallableStatement stmt = conn.prepareCall(call);
                     stmt.setString(1, shopId);
-                    stmt.setString(2, passengerId);
+                    stmt.setInt(2, passenger);
                     stmt.setString(3, amount);
                     ResultSet rs = stmt.executeQuery();
 
@@ -152,12 +149,10 @@ public class PassengerView extends JFrame {
         GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
         hGroup.addGroup(layout.createParallelGroup()
                 .addComponent(shopIdLabel)
-                .addComponent(passengerIdLabel)
                 .addComponent(amountLabel)
                 .addComponent(buyButton));
         hGroup.addGroup(layout.createParallelGroup()
                 .addComponent(shopIdField)
-                .addComponent(passengerIdField)
                 .addComponent(amountField));
         layout.setHorizontalGroup(hGroup);
 
@@ -166,9 +161,6 @@ public class PassengerView extends JFrame {
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                 .addComponent(shopIdLabel)
                 .addComponent(shopIdField));
-        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(passengerIdLabel)
-                .addComponent(passengerIdField));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                 .addComponent(amountLabel)
                 .addComponent(amountField));
@@ -305,7 +297,7 @@ public class PassengerView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "siddharth";
+            String password = "dbsproject:(";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "LostBag";
             String call = "{call " + proc + "(?)}"; // Remove the searchText parameter
