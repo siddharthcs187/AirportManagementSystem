@@ -2,15 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import net.proteanit.sql.DbUtils;
 
 public class LoginPage extends JFrame implements ActionListener {
-
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private JComboBox<String> viewSelector;
 
     public LoginPage() {
+        // Set the FlatDarkLaf look and feel
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception ex) {
@@ -18,44 +21,42 @@ public class LoginPage extends JFrame implements ActionListener {
         }
 
         // Set up the frame
-        setTitle("Login");
-        setSize(300, 200);
+        setTitle("Airport Management System - Login");
+        setSize(300, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the frame
-
-        JPanel contentPane = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel contentPane = new JPanel(new GridLayout(4, 2, 10, 10));
         contentPane.setBackground(new Color(60, 63, 65)); // Set a dark background color
         contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Create UI components
         JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setForeground(Color.WHITE); // Set label text color to white
         usernameField = new JTextField();
         JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setForeground(Color.WHITE); // Set label text color to white
         passwordField = new JPasswordField();
+        JLabel viewLabel = new JLabel("View:");
+        viewSelector = new JComboBox<>(new String[]{"Admin", "Security", "Airlines", "Passenger"});
         JButton loginButton = new JButton("Login");
         loginButton.addActionListener(this);
 
-        // Add components to the content pane
+        // Add components to the frame
         contentPane.add(usernameLabel);
         contentPane.add(usernameField);
         contentPane.add(passwordLabel);
         contentPane.add(passwordField);
+        contentPane.add(viewLabel);
+        contentPane.add(viewSelector);
         contentPane.add(new JLabel());
         contentPane.add(loginButton);
-
-        // Set the content pane for the frame
         setContentPane(contentPane);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Get the username and password from the text fields
         String username = usernameField.getText();
         char[] passwordChars = passwordField.getPassword();
         String password = new String(passwordChars);
-
+        String selectedView = (String) viewSelector.getSelectedItem();
         if (username.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter user name", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -65,27 +66,60 @@ public class LoginPage extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Please enter password", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        switch (selectedView) {
+            case "Admin":
+                if (username.equals("admin") && password.equals("password")) {
+                    dispose();
+                    SwingUtilities.invokeLater(() -> {
+                        AdminView adminView = new AdminView();
+                        adminView.setVisible(true);
+                    });
+                }else {
+                    JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            case "Security":
+                if (username.equals("security") && password.equals("password")) {
+                    dispose();
+                    SwingUtilities.invokeLater(() -> {
+                        SecurityScreen securityScreen = new SecurityScreen();
+                        securityScreen.setVisible(true);
+                    });
+                }else {
+                    JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            case "Airlines":
+                try {
+                    String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                    String user = "root";
+                    String pass = "dbsproject:(";
+                    Connection conn = DriverManager.getConnection(url, user, pass);
 
-        if (username.equals("admin") && password.equals("admin_password")) {
-            // Close the login page
-            dispose();
-
-            // Open the admin page
-            SwingUtilities.invokeLater(() -> {
-                AdminView adminView = new AdminView();
-                adminView.setVisible(true);
-            });
-        }else if (username.equals("security") && password.equals("security_password")){
-            // Close the login page
-            dispose();
-
-            // Open the security page
-            SwingUtilities.invokeLater(() -> {
-                SecurityScreen securityScreen = new SecurityScreen();
-                securityScreen.setVisible(true);
-            });
-        }else {
-            JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+                    String query = "SELECT * FROM airlines";
+                    Statement stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery(query);
+                    while (rs.next()) {
+                        String flightId = rs.getString("IATA_Code");
+                        String flightName = rs.getString("Airline_Name");
+                        if (flightId.equals(username) && flightName.equals(password)) {
+                            dispose();
+                            SwingUtilities.invokeLater(() -> {
+                                AirlineView airlineView = new AirlineView(flightId);
+                                airlineView.setVisible(true);
+                            });
+                            break;
+                        }
+                    }
+                    rs.close();
+                    stmt.close();
+                    conn.close();
+                } catch (SQLException event) {
+                    event.printStackTrace();
+                }
+                break;
+            case "Passenger":
+                break;
         }
     }
 
