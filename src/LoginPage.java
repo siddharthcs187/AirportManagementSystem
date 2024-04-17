@@ -96,17 +96,45 @@ public class LoginPage extends JFrame implements ActionListener {
                     String pass = "dbsproject:(";
                     Connection conn = DriverManager.getConnection(url, user, pass);
 
-                    String query = "SELECT * FROM airlines";
+                    String query = "SELECT Airline_Name FROM airlines WHERE IATA_Code=?";
+                    PreparedStatement statement = conn.prepareStatement(query);
+                    statement.setString(1, username);
+                    ResultSet rs = statement.executeQuery();
+                    while (rs.next()) {
+                        String flightName = rs.getString("Airline_Name");
+                        if (flightName.equals(password)) {
+                            dispose();
+                            SwingUtilities.invokeLater(() -> {
+                                AirlineView airlineView = new AirlineView(username);
+                                airlineView.setVisible(true);
+                            });
+                            break;
+                        }
+                    }
+                    rs.close();
+                    statement.close();
+                    conn.close();
+                } catch (SQLException event) {
+                    event.printStackTrace();
+                }
+                break;
+            case "Passenger":
+                try {
+                    String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                    String user = "root";
+                    String pass = "dbsproject:(";
+                    Connection conn = DriverManager.getConnection(url, user, pass);
+
+                    String query = "SELECT Mobile_No FROM passengers where Pass_ID="+username;
                     Statement stmt = conn.createStatement();
                     ResultSet rs = stmt.executeQuery(query);
                     while (rs.next()) {
-                        String flightId = rs.getString("IATA_Code");
-                        String flightName = rs.getString("Airline_Name");
-                        if (flightId.equals(username) && flightName.equals(password)) {
+                        String mobile = rs.getString("Mobile_No");
+                        if (mobile.equals(password)) {
                             dispose();
                             SwingUtilities.invokeLater(() -> {
-                                AirlineView airlineView = new AirlineView(flightId);
-                                airlineView.setVisible(true);
+                                PassengerView passengerView = new PassengerView(Integer.parseInt(username));
+                                passengerView.setVisible(true);
                             });
                             break;
                         }
@@ -117,8 +145,6 @@ public class LoginPage extends JFrame implements ActionListener {
                 } catch (SQLException event) {
                     event.printStackTrace();
                 }
-                break;
-            case "Passenger":
                 break;
         }
     }
