@@ -508,7 +508,7 @@ DELIMITER ;
 -- airline can update its flight status
 DELIMITER //
 
-CREATE PROCEDURE SetStatus(IN flight_id INT, IN stat VARCHAR(255))
+CREATE PROCEDURE SetStatus(IN flight_id INT, IN stat VARCHAR(255), IN airline VARCHAR(10))
 BEGIN
 DECLARE exit handler for sqlexception
     BEGIN
@@ -520,7 +520,7 @@ DECLARE exit handler for sqlexception
     START TRANSACTION;
         UPDATE flights
         SET Status = stat
-        WHERE Flight_No = flight_id;
+        WHERE Flight_No = flight_id AND IATA_Code = airline;
     COMMIT;
 END //
 
