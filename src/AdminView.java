@@ -51,14 +51,22 @@ public class AdminView extends JFrame {
         // Create panels for each view
         JPanel baggagePanel = createBaggagePanel();
         JPanel passengersPanel = createPassengersPanel();
-        JPanel flightsPanel = createFlightsPanel();
+        JPanel incomingFlightsPanel = createIncomingFlightsPanel();
+        JPanel outgoingFlightsPanel = createOutgoingFlightsPanel();
         JPanel staffPanel = createStaffPanel();
+        JPanel inventoryPanel = createInventoryPanel();
+        JPanel assetsPanel = createAssetsPanel();
+        JPanel airlinePanel = createAirlinesPanel();
 
         // Add panels to the tabbed pane
         tabbedPane.addTab("Baggage", baggagePanel);
         tabbedPane.addTab("Passengers", passengersPanel);
-        tabbedPane.addTab("Flights", flightsPanel);
+        tabbedPane.addTab("Incoming Flights", incomingFlightsPanel);
+        tabbedPane.addTab("Outgoing Flights", outgoingFlightsPanel);
         tabbedPane.addTab("Staff", staffPanel);
+        tabbedPane.addTab("Inventory",inventoryPanel);
+        tabbedPane.addTab("Assets",assetsPanel);
+        tabbedPane.addTab("Airline",airlinePanel);
 
         // Add the tabbed pane to the content pane
         contentPane.add(tabbedPane, BorderLayout.CENTER);
@@ -157,7 +165,7 @@ public class AdminView extends JFrame {
         return passengersPanel;
     }
 
-    private JPanel createFlightsPanel() {
+    private JPanel createIncomingFlightsPanel() {
         JPanel flightsPanel = createPanel();
 
         JTable flightsTable = createTable();
@@ -167,7 +175,7 @@ public class AdminView extends JFrame {
             String password = "dbsproject:(";
             Connection conn = DriverManager.getConnection(url, username, password);
 
-            String query = "SELECT * FROM flights";
+            String query = "SELECT * FROM flights where is_Arriving = 1";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
@@ -202,6 +210,139 @@ public class AdminView extends JFrame {
 
         return flightsPanel;
     }
+
+    private JPanel createOutgoingFlightsPanel() {
+        JPanel flightsPanel = createPanel();
+
+        JTable flightsTable = createTable();
+        try {
+            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String username = "root";
+            String password = "dbsproject:(";
+            Connection conn = DriverManager.getConnection(url, username, password);
+
+            String query = "SELECT * FROM flights where is_Arriving = 0";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            flightsTable.setModel(DbUtils.resultSetToTableModel(rs));
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Add search bar components
+        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JTextField searchField = new JTextField(20);
+        JButton searchButton = new JButton("Search");
+        searchBarPanel.add(searchField);
+        searchBarPanel.add(searchButton);
+        flightsPanel.add(searchBarPanel, BorderLayout.NORTH);
+
+        JScrollPane scrollPane = new JScrollPane(flightsTable);
+        flightsPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Attach search button listener
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = searchField.getText();
+                searchInTable("GetFlightDetails", flightsTable, searchText);
+            }
+        });
+
+        return flightsPanel;
+    }
+    private JPanel createInventoryPanel() {
+        JPanel inventoryPanel = createPanel(); // Assuming createPanel() method creates a JPanel
+
+        JTable inventoryTable = createTable(); // Assuming createTable() method creates a JTable
+        try {
+            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String username = "root";
+            String password = "dbsproject:(";
+            Connection conn = DriverManager.getConnection(url, username, password);
+
+            String query = "SELECT * FROM inventory";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            inventoryTable.setModel(DbUtils.resultSetToTableModel(rs));
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JScrollPane scrollPane = new JScrollPane(inventoryTable);
+        inventoryPanel.add(scrollPane, BorderLayout.CENTER);
+
+        return inventoryPanel;
+    }
+
+    private JPanel createAssetsPanel() {
+        JPanel assetsPanel = createPanel(); // Assuming createPanel() method creates a JPanel
+
+        JTable assetsTable = createTable(); // Assuming createTable() method creates a JTable
+        try {
+            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String username = "root";
+            String password = "dbsproject:(";
+            Connection conn = DriverManager.getConnection(url, username, password);
+
+            String query = "SELECT * FROM ground_assets";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            assetsTable.setModel(DbUtils.resultSetToTableModel(rs));
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JScrollPane scrollPane = new JScrollPane(assetsTable);
+        assetsPanel.add(scrollPane, BorderLayout.CENTER);
+
+        return assetsPanel;
+    }
+
+    private JPanel createAirlinesPanel() {
+        JPanel airlinesPanel = createPanel(); // Assuming createPanel() method creates a JPanel
+
+        JTable airlinesTable = createTable(); // Assuming createTable() method creates a JTable
+        try {
+            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String username = "root";
+            String password = "dbsproject:(";
+            Connection conn = DriverManager.getConnection(url, username, password);
+
+            String query = "SELECT * FROM airlines";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            airlinesTable.setModel(DbUtils.resultSetToTableModel(rs));
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JScrollPane scrollPane = new JScrollPane(airlinesTable);
+        airlinesPanel.add(scrollPane, BorderLayout.CENTER);
+
+        return airlinesPanel;
+    }
+
     private JPanel createStaffPanel() {
         JPanel staffPanel = createPanel();
         JTable staffTable = createTable();
