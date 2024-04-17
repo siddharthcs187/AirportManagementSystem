@@ -173,16 +173,125 @@ public class PassengerView extends JFrame {
         // Create panels for each view
         JPanel shopsPanel = createShopsPanel();
         JPanel passengerDetailsPanel = createPassengerDetailsPanel();
+        JPanel lostBagPanel = createLostBagPanel();
+
 
         // Add panels to the tabbed pane
         tabbedPane.addTab("Shops", shopsPanel);
         tabbedPane.addTab("Place Order", passengerDetailsPanel);
+        tabbedPane.addTab("Lost Bag", lostBagPanel);
+
 
         // Add the tabbed pane to the content pane
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
         // Set the content pane for the frame
         setContentPane(contentPane);
+    }
+    private JPanel createLostBagPanel() {
+        JPanel passengerDetailsPanel = createPanel();
+
+
+        // Create input fields for passenger details
+        JTextField bagIdField1 = new JTextField(20);
+        bagIdField1.setFont(new Font("Arial", Font.PLAIN, 14));
+        bagIdField1.setBorder(BorderFactory.createLineBorder(new Color(204, 204, 204), 1));
+
+
+        // Create labels for input fields
+        JLabel bagIdLabel1 = new JLabel("Lost Bag's ID:");
+        bagIdLabel1.setFont(new Font("Arial", Font.BOLD, 14));
+        bagIdLabel1.setForeground(new Color(255, 255, 255));
+
+
+        // Create Button:
+        JButton flagBagButton = new JButton("Lost");
+        flagBagButton.setFont(new Font("Arial", Font.BOLD, 14));
+        flagBagButton.setForeground(Color.WHITE);
+        flagBagButton.setBackground(new Color(200, 50, 50));
+        flagBagButton.setBorderPainted(false);
+
+
+        // Add ActionListener to the button
+        flagBagButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Implement the action to perform when the button is clicked
+                // For example, call a method to handle the "Lost" action
+                handleLostAction(bagIdField1.getText());
+                bagIdField1.setText("");
+            }
+        });
+
+
+        // Create a layout for the panel
+        GroupLayout layout = new GroupLayout(passengerDetailsPanel);
+        passengerDetailsPanel.setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
+
+        // Set up the horizontal group
+        GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
+        hGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(bagIdLabel1)
+                .addComponent(bagIdField1)
+                .addComponent(flagBagButton)
+        );
+        layout.setHorizontalGroup(hGroup);
+
+
+        // Set up the vertical group
+        GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(bagIdLabel1)
+        );
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(bagIdField1)
+        );
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(flagBagButton)
+        );
+        layout.setVerticalGroup(vGroup);
+
+
+        return passengerDetailsPanel;
+    }
+
+
+
+
+    // Method to handle the "Lost" action
+    private void handleLostAction(String bagId) {
+        // Implement the action to perform when the "Lost" button is clicked
+        // For example, call a method to handle the lost bag
+        System.out.println("Lost bag ID: " + bagId);
+        try {
+            String url = "jdbc:mysql://localhost:3306/airportdb";
+            String username = "root";
+            String password = "siddharth";
+            Connection conn = DriverManager.getConnection(url, username, password);
+            String proc = "LostBag";
+            String call = "{call " + proc + "(?)}"; // Remove the searchText parameter
+
+
+
+
+            // Prepare the call to the stored procedure
+            CallableStatement pstmt = conn.prepareCall(call);
+            pstmt.setString(1, bagId);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = pstmt.executeQuery();
+            JOptionPane.showMessageDialog(this, "Lost Bag reported successfully.");
+
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Bag couldn't be reported as Lost.");
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
