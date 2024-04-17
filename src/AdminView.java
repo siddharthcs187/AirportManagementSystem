@@ -266,11 +266,7 @@ public class AdminView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText();
-                try{
-                    searchInTable("GetBagDetails", baggageTable, searchText);
-                }catch(Exception err){
-                    JOptionPane.showMessageDialog(null, "Search Failed !");
-                }
+                searchInTable("GetBagDetails", baggageTable, searchText);
             }
         });
 
@@ -305,7 +301,7 @@ public class AdminView extends JFrame {
         isArrivingField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
         // Create labels for input fields
-        JLabel flightNameLabel = new JLabel("Enter .csv File Path:");
+        JLabel flightNameLabel = new JLabel("Enter Flight Name:");
         JLabel airlineNameLabel = new JLabel("Enter Airline Name:");
         JLabel flightCodeLabel = new JLabel("Enter IATA Code:");
         JLabel dateTimeLabel = new JLabel("Enter Date Time:");
@@ -415,7 +411,7 @@ public class AdminView extends JFrame {
                 try {
                     String url = "jdbc:mysql://localhost:3306/airportdb";
                     String username = "root";
-                    String password = "dbsproject:(";
+                    String password = "siddharth";
                     conn = DriverManager.getConnection(url, username, password);
                     conn.setAutoCommit(false); // Start transaction
 
@@ -649,7 +645,7 @@ public class AdminView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "siddharth";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetPassengersWithRedFlag";
             String call = "{call " + proc + "()}"; // Remove the searchText parameter
@@ -686,7 +682,7 @@ public class AdminView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "siddharth";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetSales";
             String call = "{call " + proc + "()}"; // Remove the searchText parameter
@@ -723,7 +719,7 @@ public class AdminView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "siddharth";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetInsecureBags";
             String call = "{call " + proc + "()}"; // Remove the searchText parameter
@@ -909,7 +905,7 @@ public class AdminView extends JFrame {
             pstmt.close();
             conn.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Search Failed !");
+            ex.printStackTrace();
         }
     }
 
