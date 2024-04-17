@@ -57,6 +57,9 @@ public class AdminView extends JFrame {
         JPanel inventoryPanel = createInventoryPanel();
         JPanel assetsPanel = createAssetsPanel();
         JPanel airlinePanel = createAirlinesPanel();
+        JPanel flaggedPassPanel = createFlaggedPassengersPanel();
+        JPanel flaggedBagsPanel = createFlaggedBagsPanel();
+        JPanel salesPanel = createSalesPanel();
 
         // Add panels to the tabbed pane
         tabbedPane.addTab("Baggage", baggagePanel);
@@ -67,7 +70,9 @@ public class AdminView extends JFrame {
         tabbedPane.addTab("Inventory",inventoryPanel);
         tabbedPane.addTab("Assets",assetsPanel);
         tabbedPane.addTab("Airline",airlinePanel);
-
+        tabbedPane.addTab("Flagged Passengers", flaggedPassPanel);
+        tabbedPane.addTab("Flagged Bags", flaggedBagsPanel);
+        tabbedPane.addTab("Sales", salesPanel);
         // Add the tabbed pane to the content pane
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
@@ -256,6 +261,119 @@ public class AdminView extends JFrame {
 
         return flightsPanel;
     }
+
+    private JPanel createFlaggedPassengersPanel() {
+        JPanel passengersPanel = createPanel();
+        JTable passengerTable = createTable();
+        try {
+            String url = "jdbc:mysql://localhost:3306/airportdb";
+            String username = "root";
+            String password = "siddharth";
+            Connection conn = DriverManager.getConnection(url, username, password);
+            String proc = "GetPassengersWithRedFlag";
+            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+
+
+            // Prepare the call to the stored procedure
+            CallableStatement pstmt = conn.prepareCall(call);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = pstmt.executeQuery();
+
+
+            passengerTable.setModel(DbUtils.resultSetToTableModel(rs));
+
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        JScrollPane scrollPane = new JScrollPane(passengerTable);
+        passengersPanel.add(scrollPane, BorderLayout.CENTER);
+
+
+        return passengersPanel;
+    }
+
+
+    private JPanel createSalesPanel() {
+        JPanel salesPanel = createPanel();
+        JTable salesTable = createTable();
+        try {
+            String url = "jdbc:mysql://localhost:3306/airportdb";
+            String username = "root";
+            String password = "siddharth";
+            Connection conn = DriverManager.getConnection(url, username, password);
+            String proc = "GetSales";
+            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+
+
+            // Prepare the call to the stored procedure
+            CallableStatement pstmt = conn.prepareCall(call);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = pstmt.executeQuery();
+
+
+            salesTable.setModel(DbUtils.resultSetToTableModel(rs));
+
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        JScrollPane scrollPane = new JScrollPane(salesTable);
+        salesPanel.add(scrollPane, BorderLayout.CENTER);
+
+
+        return salesPanel;
+    }
+
+
+    private JPanel createFlaggedBagsPanel() {
+        JPanel bagsPanel = createPanel();
+        JTable bagsTable = createTable();
+        try {
+            String url = "jdbc:mysql://localhost:3306/airportdb";
+            String username = "root";
+            String password = "siddharth";
+            Connection conn = DriverManager.getConnection(url, username, password);
+            String proc = "GetInsecureBags";
+            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+
+
+            // Prepare the call to the stored procedure
+            CallableStatement pstmt = conn.prepareCall(call);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = pstmt.executeQuery();
+
+
+            bagsTable.setModel(DbUtils.resultSetToTableModel(rs));
+
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        JScrollPane scrollPane = new JScrollPane(bagsTable);
+        bagsPanel.add(scrollPane, BorderLayout.CENTER);
+
+
+        return bagsPanel;
+    }
+
+
+
     private JPanel createInventoryPanel() {
         JPanel inventoryPanel = createPanel(); // Assuming createPanel() method creates a JPanel
 
