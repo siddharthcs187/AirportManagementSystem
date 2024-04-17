@@ -9,7 +9,7 @@ import net.proteanit.sql.DbUtils;
 
 public class PassengerView extends JFrame {
     private JTabbedPane tabbedPane;
-    private String passenger;
+    private int passenger;
 
     private JPanel createPanel() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -45,6 +45,40 @@ public class PassengerView extends JFrame {
 
             // Prepare the call to the stored procedure
             CallableStatement stmt = conn.prepareCall(call);
+            ResultSet rs = stmt.executeQuery();
+
+            shopsTable.setModel(DbUtils.resultSetToTableModel(rs));
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JScrollPane scrollPane = new JScrollPane(shopsTable);
+        shopsPanel.add(scrollPane, BorderLayout.CENTER);
+
+        return shopsPanel;
+    }
+
+    private JPanel createStatusPanel() {
+        JPanel shopsPanel = createPanel();
+
+        JTable shopsTable = createTable();
+        try {
+            String url = "jdbc:mysql://localhost:3306/airportdb";
+            String username = "root";
+            String password = "siddharth";
+            Connection conn = DriverManager.getConnection(url, username, password);
+
+            // Corrected call string with procedure name and input parameter placeholder
+            String procedure = "GetFlightStatus";
+            String call = "{call " + procedure + "(?)}";
+
+            // Prepare the call to the stored procedure
+            CallableStatement stmt = conn.prepareCall(call);
+            stmt.setInt(1, passenger);
             ResultSet rs = stmt.executeQuery();
 
             shopsTable.setModel(DbUtils.resultSetToTableModel(rs));
@@ -146,7 +180,7 @@ public class PassengerView extends JFrame {
     }
 
 
-    public PassengerView(String passenger) {
+    public PassengerView(int passenger) {
         this.passenger = passenger;
 
         try {
@@ -174,12 +208,14 @@ public class PassengerView extends JFrame {
         JPanel shopsPanel = createShopsPanel();
         JPanel passengerDetailsPanel = createPassengerDetailsPanel();
         JPanel lostBagPanel = createLostBagPanel();
+        JPanel statusPanel = createStatusPanel();
 
 
         // Add panels to the tabbed pane
         tabbedPane.addTab("Shops", shopsPanel);
         tabbedPane.addTab("Place Order", passengerDetailsPanel);
         tabbedPane.addTab("Lost Bag", lostBagPanel);
+        tabbedPane.addTab("Flight Status", statusPanel);
 
 
         // Add the tabbed pane to the content pane
@@ -296,7 +332,7 @@ public class PassengerView extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            PassengerView passengerView = new PassengerView("John");
+            PassengerView passengerView = new PassengerView(4);
             passengerView.setVisible(true);
         });
     }
