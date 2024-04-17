@@ -107,6 +107,49 @@ BEGIN
         WHERE Bag_ID = p_Bag_ID;
     COMMIT;
 END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE FlagBag(IN p_Bag_ID INT)
+BEGIN
+    DECLARE exit handler for sqlexception
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error occurred, transaction rolled back.' AS Message;
+    END;
+
+    START TRANSACTION;
+    
+    -- Update the Is_Secure status of the bag
+    UPDATE bags
+    SET Is_Secure = false
+    WHERE Bag_ID = p_Bag_ID;
+
+    COMMIT;
+    SELECT 'Bag flagged successfully.' AS Message;
+END //
+DELIMITER ;
+--  unflagging a bag
+DELIMITER //
+
+CREATE PROCEDURE unFlagBag(IN p_Bag_ID INT)
+BEGIN
+    DECLARE exit handler for sqlexception
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error occurred, transaction rolled back.' AS Message;
+    END;
+
+    START TRANSACTION;
+    
+    -- Update the Is_Secure status of the bag
+    UPDATE bags
+    SET Is_Secure = true
+    WHERE Bag_ID = p_Bag_ID;
+
+    COMMIT;
+    SELECT 'Bag flagged successfully.' AS Message;
+END //
 
 DELIMITER ;
 

@@ -2,11 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import com.formdev.flatlaf.FlatLightLaf;
 
 public class SecurityScreen extends JFrame implements ActionListener {
     private JButton flagButton;
     private boolean isFlagged;
+    private JTextField bagIdField;
 
     public SecurityScreen() {
         // Set the FlatLaf light theme
@@ -21,7 +27,7 @@ public class SecurityScreen extends JFrame implements ActionListener {
         bagIdLabel.setFont(new Font("Arial", Font.BOLD, 14));
         bagIdLabel.setForeground(new Color(51, 51, 51));
 
-        JTextField bagIdField = new JTextField(20);
+        bagIdField = new JTextField(20);
         bagIdField.setFont(new Font("Arial", Font.PLAIN, 14));
         bagIdField.setBorder(BorderFactory.createLineBorder(new Color(204, 204, 204), 1));
 
@@ -61,15 +67,57 @@ public class SecurityScreen extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String searchText = bagIdField.getText();
         if (e.getSource() == flagButton) {
             isFlagged = !isFlagged;
             if (isFlagged) {
                 flagButton.setBackground(new Color(255, 102, 102));
                 flagButton.setText("Unflag");
+                try {
+                    String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                    String username = "root";
+                    String password = "dbsproject:(";
+                    try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                        String procedure = "FlagBag";
+                        String call = "{call " + procedure + "(?)}";
+                        try (CallableStatement pstmt = conn.prepareCall(call)) {
+                            pstmt.setInt(1, Integer.parseInt(searchText)); // Assuming Bag ID is an integer
+                            pstmt.execute();
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                } catch (NumberFormatException ex) {
+                    System.err.println("Invalid Bag ID format.");
+                }
             } else {
                 flagButton.setBackground(new Color(51, 153, 255));
                 flagButton.setText("Flag");
+                try {
+                    String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                    String username = "root";
+                    String password = "dbsproject:(";
+                    try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                        String procedure = "unFlagBag";
+                        String call = "{call " + procedure + "(?)}";
+                        try (CallableStatement pstmt = conn.prepareCall(call)) {
+                            pstmt.setInt(1, Integer.parseInt(searchText)); // Assuming Bag ID is an integer
+                            pstmt.execute();
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                } catch (NumberFormatException ex) {
+                    System.err.println("Invalid Bag ID format.");
+                }
             }
         }
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new SecurityScreen();
+        });
+    }
 }
+

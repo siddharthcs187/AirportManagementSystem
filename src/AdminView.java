@@ -295,14 +295,14 @@ public class AdminView extends JFrame {
             ex.printStackTrace();
         }
     }
-        public static void main(String[] args) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    AdminView adminView = new AdminView();
-                    adminView.setVisible(true);
-                }
-            });
-        }
+//        public static void main(String[] args) {
+//            SwingUtilities.invokeLater(new Runnable() {
+//                @Override
+//                public void run() {
+//                    AdminView adminView = new AdminView();
+//                    adminView.setVisible(true);
+//                }
+//            });
+//        }
 }
 
