@@ -109,8 +109,8 @@ class Passenger {
 }
 
 class CSVParser {
-    public static List<Passenger> readCSV() {
-        String csvFile = "/Users/siddharthcs/Downloads/dummy.csv";
+    public static List<Passenger> readCSV(String csvFile) throws IOException {
+//        String csvFile = "C:\\Users\\sunda\\Downloads\\dummy.csv";
         String line;
         String cvsSplitBy = ",";
 
@@ -266,7 +266,11 @@ public class AdminView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText();
-                searchInTable("GetBagDetails", baggageTable, searchText);
+                try{
+                    searchInTable("GetBagDetails", baggageTable, searchText);
+                }catch(Exception err){
+                    JOptionPane.showMessageDialog(null, "Search Failed !");
+                }
             }
         });
 
@@ -301,7 +305,7 @@ public class AdminView extends JFrame {
         isArrivingField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
         // Create labels for input fields
-        JLabel flightNameLabel = new JLabel("Enter Flight Name:");
+        JLabel flightNameLabel = new JLabel("Enter .csv File Path:");
         JLabel airlineNameLabel = new JLabel("Enter Airline Name:");
         JLabel flightCodeLabel = new JLabel("Enter IATA Code:");
         JLabel dateTimeLabel = new JLabel("Enter Date Time:");
@@ -400,13 +404,18 @@ public class AdminView extends JFrame {
                 String status = statusField.getText();
                 boolean isArriving = Boolean.parseBoolean(isArrivingField.getText());
                 CSVParser csv = new CSVParser();
-                List<Passenger> lp = csv.readCSV();
+                List<Passenger> lp = null;
+                try {
+                    lp = csv.readCSV(fileName);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
 
                 Connection conn = null;
                 try {
                     String url = "jdbc:mysql://localhost:3306/airportdb";
                     String username = "root";
-                    String password = "siddharth";
+                    String password = "dbsproject:(";
                     conn = DriverManager.getConnection(url, username, password);
                     conn.setAutoCommit(false); // Start transaction
 
@@ -640,7 +649,7 @@ public class AdminView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "siddharth";
+            String password = "dbsproject:(";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetPassengersWithRedFlag";
             String call = "{call " + proc + "()}"; // Remove the searchText parameter
@@ -677,7 +686,7 @@ public class AdminView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "siddharth";
+            String password = "dbsproject:(";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetSales";
             String call = "{call " + proc + "()}"; // Remove the searchText parameter
@@ -714,7 +723,7 @@ public class AdminView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "siddharth";
+            String password = "dbsproject:(";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetInsecureBags";
             String call = "{call " + proc + "()}"; // Remove the searchText parameter
@@ -900,7 +909,7 @@ public class AdminView extends JFrame {
             pstmt.close();
             conn.close();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Search Failed !");
         }
     }
 
