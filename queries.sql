@@ -98,16 +98,7 @@ SELECT
 FROM bags;
 
 -- security personnel flagging a bag
-DELIMITER //
-CREATE PROCEDURE FlagBag(IN p_Bag_ID INT)
-BEGIN
-    START TRANSACTION;
-        UPDATE bags
-        SET Is_Secure = false
-        WHERE Bag_ID = p_Bag_ID;
-    COMMIT;
-END //
-DELIMITER ;
+
 
 DELIMITER //
 CREATE PROCEDURE FlagBag(IN p_Bag_ID INT)
@@ -356,6 +347,65 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE GetBagDetails(IN bagID INT)
+BEGIN
+    SELECT 
+        Bag_ID AS `Bag ID`, 
+        Pass_ID AS `Passenger ID`, 
+        Weight, 
+        Is_Secure AS `Is Secure`, 
+        Is_Fragile AS `Is Fragile`, 
+        Flight_No AS `Flight Number`, 
+        Lost 
+    FROM 
+        bags
+    WHERE 
+        Bag_ID = bagID;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE GetFlightDetails(IN flightNumber INT)
+BEGIN
+    SELECT 
+        Flight_No AS `Flight Number`, 
+        Date_Time AS `Date and Time`, 
+        Origin AS `From`,
+        Checkin_Lane AS `Check-In Lane`, 
+        Destination AS `To`, 
+        Baggage_Belt AS `Baggage Belt` 
+    FROM 
+        flights 
+    WHERE 
+        Flight_No = flightNumber;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE GetStaffDetails(IN namePlaceholder VARCHAR(255))
+BEGIN
+    SELECT 
+        Staff_ID AS ID,
+        CONCAT(First_name, ' ', Last_name) AS Name,
+        IATA_Code AS IATA 
+    FROM 
+        staff 
+    WHERE 
+        First_name LIKE CONCAT(namePlaceholder, '%')
+    ORDER BY 
+        Staff_ID;
+END //
+
+DELIMITER ;
+
+
 
 
 

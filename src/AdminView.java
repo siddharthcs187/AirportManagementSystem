@@ -106,8 +106,7 @@ public class AdminView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText();
-                // Perform search operation based on searchText on the bags table
-                // Update baggageTable if needed
+                searchInTable("GetBagDetails", baggageTable, searchText);
             }
         });
 
@@ -151,31 +150,7 @@ public class AdminView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText();
-                String passengerQuery = "SELECT * FROM passengers WHERE first_name LIKE ?";
-
-                try {
-                    String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
-                    String username = "root";
-                    String password = "dbsproject:(";
-                    Connection conn = DriverManager.getConnection(url, username, password);
-
-                    // Corrected call string with procedure name and input parameter placeholder
-                    String procedure = "GetPassengerDetails";
-                    String call = "{call " + procedure + "(?)}"; // Note the correct concatenation
-
-                    // Prepare the call to the stored procedure
-                    CallableStatement pstmt = conn.prepareCall(call);
-                    pstmt.setString(1, searchText);
-                    ResultSet rs = pstmt.executeQuery();
-
-                    passengerTable.setModel(DbUtils.resultSetToTableModel(rs));
-
-                    rs.close();
-                    pstmt.close();
-                    conn.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+                searchInTable("GetPassengerDetails", passengerTable, searchText);
             }
         });
 
@@ -221,8 +196,7 @@ public class AdminView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText();
-                // Perform search operation based on searchText on the passengers table
-                // Update passengerTable if needed
+                searchInTable("GetFlightDetails", flightsTable, searchText);
             }
         });
 
@@ -267,23 +241,26 @@ public class AdminView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText();
-                searchInTable(staffTable, "staff", searchText);
+                searchInTable("GetStaffDetails", staffTable, searchText);
             }
         });
 
         return staffPanel;
     }
 
-    private void searchInTable(JTable table, String tableName, String searchText) {
+    private void searchInTable(String procedure, JTable table, String searchText) {
         try {
             String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
             String username = "root";
             String password = "dbsproject:(";
             Connection conn = DriverManager.getConnection(url, username, password);
 
-            String query = "SELECT * FROM " + tableName + " WHERE column_name LIKE ?";
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, "%" + searchText + "%");
+            // Corrected call string with procedure name and input parameter placeholder
+            String call = "{call " + procedure + "(?)}"; // Note the correct concatenation
+
+            // Prepare the call to the stored procedure
+            CallableStatement pstmt = conn.prepareCall(call);
+            pstmt.setString(1, searchText);
             ResultSet rs = pstmt.executeQuery();
 
             table.setModel(DbUtils.resultSetToTableModel(rs));
@@ -295,14 +272,15 @@ public class AdminView extends JFrame {
             ex.printStackTrace();
         }
     }
-//        public static void main(String[] args) {
-//            SwingUtilities.invokeLater(new Runnable() {
-//                @Override
-//                public void run() {
-//                    AdminView adminView = new AdminView();
-//                    adminView.setVisible(true);
-//                }
-//            });
-//        }
+
+        public static void main(String[] args) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    AdminView adminView = new AdminView();
+                    adminView.setVisible(true);
+                }
+            });
+        }
 }
 
