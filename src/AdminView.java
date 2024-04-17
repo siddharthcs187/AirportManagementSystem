@@ -8,8 +8,6 @@ import net.proteanit.sql.DbUtils;
 
 public class AdminView extends JFrame {
     private JTabbedPane tabbedPane;
-    private JTextField searchField;
-    private JButton searchButton;
 
     public AdminView() {
         // Set the FlatLaf light theme
@@ -29,14 +27,6 @@ public class AdminView extends JFrame {
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.setBackground(new Color(243, 243, 243));
 
-        // Add search bar components
-        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        searchField = new JTextField(20);
-        searchButton = new JButton("Search");
-        searchBarPanel.add(searchField);
-        searchBarPanel.add(searchButton);
-        contentPane.add(searchBarPanel, BorderLayout.NORTH);
-
         // Create a tabbed pane with top tabs
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBackground(new Color(243, 243, 243));
@@ -46,7 +36,7 @@ public class AdminView extends JFrame {
         JPanel baggagePanel = createBaggagePanel();
         JPanel passengersPanel = createPassengersPanel();
         JPanel flightsPanel = createFlightsPanel();
-        JPanel staffPanel = createStaffPanel(); // Added this line
+        JPanel staffPanel = createStaffPanel();
 
         // Add panels to the tabbed pane
         tabbedPane.addTab("Baggage", baggagePanel);
@@ -59,23 +49,9 @@ public class AdminView extends JFrame {
 
         // Set the content pane for the frame
         setContentPane(contentPane);
-
-        // Attach search button listener
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String searchText = searchField.getText();
-                // Perform search operation based on searchText
-                // Update UI if needed
-            }
-        });
     }
 
-    // Other methods (createBaggagePanel, createPassengersPanel, etc.) remain unchanged
-
-
-
-private JPanel createBaggagePanel() {
+    private JPanel createBaggagePanel() {
         JPanel baggagePanel = new JPanel(new BorderLayout());
         baggagePanel.setBackground(new Color(243, 243, 243));
 
@@ -105,9 +81,27 @@ private JPanel createBaggagePanel() {
             e.printStackTrace();
         }
 
+        // Add search bar components
+        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JTextField searchField = new JTextField(20);
+        JButton searchButton = new JButton("Search");
+        searchBarPanel.add(searchField);
+        searchBarPanel.add(searchButton);
+        baggagePanel.add(searchBarPanel, BorderLayout.NORTH);
+
         // Add the JTable to a JScrollPane
         JScrollPane scrollPane = new JScrollPane(baggageTable);
         baggagePanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Attach search button listener
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = searchField.getText();
+                // Perform search operation based on searchText on the bags table
+                // Update baggageTable if needed
+            }
+        });
 
         return baggagePanel;
     }
@@ -142,8 +136,48 @@ private JPanel createBaggagePanel() {
             e.printStackTrace();
         }
 
+        // Add search bar components
+        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JTextField searchField = new JTextField(20);
+        JButton searchButton = new JButton("Search");
+        searchBarPanel.add(searchField);
+        searchBarPanel.add(searchButton);
+        passengersPanel.add(searchBarPanel, BorderLayout.NORTH);
+
         JScrollPane scrollPane = new JScrollPane(passengerTable);
         passengersPanel.add(scrollPane, BorderLayout.CENTER);
+
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = searchField.getText();
+                String passengerQuery = "SELECT * FROM passengers WHERE first_name LIKE ?";
+
+                try {
+                    String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                    String username = "root";
+                    String password = "dbsproject:(";
+                    Connection conn = DriverManager.getConnection(url, username, password);
+
+                    // Corrected call string with procedure name and input parameter placeholder
+                    String procedure = "GetPassengerDetails";
+                    String call = "{call " + procedure + "(?)}"; // Note the correct concatenation
+
+                    // Prepare the call to the stored procedure
+                    CallableStatement pstmt = conn.prepareCall(call);
+                    pstmt.setString(1, searchText);
+                    ResultSet rs = pstmt.executeQuery();
+
+                    passengerTable.setModel(DbUtils.resultSetToTableModel(rs));
+
+                    rs.close();
+                    pstmt.close();
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
         return passengersPanel;
     }
@@ -178,12 +212,29 @@ private JPanel createBaggagePanel() {
             e.printStackTrace();
         }
 
+        // Add search bar components
+        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JTextField searchField = new JTextField(20);
+        JButton searchButton = new JButton("Search");
+        searchBarPanel.add(searchField);
+        searchBarPanel.add(searchButton);
+        flightsPanel.add(searchBarPanel, BorderLayout.NORTH);
+
         JScrollPane scrollPane = new JScrollPane(flightsTable);
         flightsPanel.add(scrollPane, BorderLayout.CENTER);
 
+        // Attach search button listener
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = searchField.getText();
+                // Perform search operation based on searchText on the passengers table
+                // Update passengerTable if needed
+            }
+        });
+
         return flightsPanel;
     }
-
     private JPanel createStaffPanel() {
         JPanel staffPanel = new JPanel(new BorderLayout());
         staffPanel.setBackground(new Color(243, 243, 243));
@@ -214,17 +265,58 @@ private JPanel createBaggagePanel() {
             e.printStackTrace();
         }
 
+        // Add search bar components
+        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JTextField searchField = new JTextField(20);
+        JButton searchButton = new JButton("Search");
+        searchBarPanel.add(searchField);
+        searchBarPanel.add(searchButton);
+        staffPanel.add(searchBarPanel, BorderLayout.NORTH);
+
         JScrollPane scrollPane = new JScrollPane(staffTable);
         staffPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Attach search button listener
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = searchField.getText();
+                searchInTable(staffTable, "staff", searchText);
+            }
+        });
 
         return staffPanel;
     }
 
-    public static void main(String[] args) {
-        // Create and display the GUI
-        SwingUtilities.invokeLater(() -> {
-            AdminView adminView = new AdminView();
-            adminView.setVisible(true);
-        });
+    private void searchInTable(JTable table, String tableName, String searchText) {
+        try {
+            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String username = "root";
+            String password = "dbsproject:(";
+            Connection conn = DriverManager.getConnection(url, username, password);
+
+            String query = "SELECT * FROM " + tableName + " WHERE column_name LIKE ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, "%" + searchText + "%");
+            ResultSet rs = pstmt.executeQuery();
+
+            table.setModel(DbUtils.resultSetToTableModel(rs));
+
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
+        public static void main(String[] args) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    AdminView adminView = new AdminView();
+                    adminView.setVisible(true);
+                }
+            });
+        }
 }
+
