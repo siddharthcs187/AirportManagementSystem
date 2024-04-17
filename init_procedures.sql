@@ -952,5 +952,31 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+DELIMITER //
+
+CREATE PROCEDURE GetFlightStatus(
+    IN userId INT
+)
+BEGIN
+    SELECT 
+        f.Flight_No AS `Flight Number`, 
+        f.Date_Time AS `Date and Time`, 
+        f.Gate AS `Gate`, 
+        f.Origin AS `Origin`, 
+        f.Destination AS `Destination`, 
+        f.Status AS `Status`,
+        CASE 
+            WHEN f.Is_Arriving THEN f.Baggage_Belt
+            ELSE f.Checkin_Lane 
+        END AS `Baggage Belt or Check-in Lane`
+    FROM flights f
+    INNER JOIN passengers p ON f.Flight_No = p.Flight_No
+    WHERE p.Pass_ID = userId;
+END //
+
+DELIMITER ;
+
 
 

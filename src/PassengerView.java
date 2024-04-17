@@ -322,10 +322,4 @@ public class PassengerView extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            PassengerView passengerView = new PassengerView(4);
-            passengerView.setVisible(true);
-        });
-    }
 }

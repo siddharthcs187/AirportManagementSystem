@@ -563,10 +563,4 @@ public class AirlineView extends JFrame {
 
         return panel;
     }
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            AirlineView airlineView = new AirlineView("6E");
-            airlineView.setVisible(true);
-        });
-    }
 }
