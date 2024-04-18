@@ -55,4 +55,9 @@ git clone https://github.com/siddharthcs187/AirportManagementSystem.git
 ```
 2. Set up MySQL database as mentioned in "Database Initialization" section.
 3. Open the project in an IDE like Eclipse or IntelliJ.
-4. Build, compile, and run the project.
+4. Replace all occurences of 
+```
+mysql@1704
+```
+with your own MySQL server password. Note that this application utilises a local MySQL server to run. 
+4. Build, compile, and run the project - you can launch any of the files using the IDE. Start with the `LoginPage.java` file.

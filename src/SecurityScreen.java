@@ -148,9 +148,9 @@ public class SecurityScreen extends JFrame implements ActionListener {
             String bagIdToFlag = bagIdField1.getText();
 
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:("; // Modify with your actual password
+                String password = "mysql@1704"; // Modify with your actual password
 
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     String procedure = "FlagBag";
@@ -173,9 +173,9 @@ public class SecurityScreen extends JFrame implements ActionListener {
             String bagIdToUnflag = bagIdField2.getText();
 
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:("; // Modify with your actual password
+                String password = "mysql@1704"; // Modify with your actual password
 
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     String procedure = "unFlagBag";
@@ -199,9 +199,9 @@ public class SecurityScreen extends JFrame implements ActionListener {
             // Flag Passenger Logic Here
             // Example JDBC code to call the "FlagPassenger" stored procedure
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:("; // Modify with your actual password
+                String password = "mysql@1704"; // Modify with your actual password
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     String procedure = "FlagPassenger";
                     String call = "{call " + procedure + "(?)}";
@@ -224,9 +224,9 @@ public class SecurityScreen extends JFrame implements ActionListener {
             // Unflag Passenger Logic Here
             // Example JDBC code to call the "UnflagPassenger" stored procedure
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:("; // Modify with your actual password
+                String password = "mysql@1704"; // Modify with your actual password
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     String procedure = "unFlagPassenger";
                     String call = "{call " + procedure + "(?)}";

@@ -231,9 +231,9 @@ public class AdminView extends JFrame {
         JPanel baggagePanel = createPanel();
         JTable baggageTable = createTable();
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             String query = "SELECT * FROM bags";
@@ -411,7 +411,7 @@ public class AdminView extends JFrame {
                 try {
                     String url = "jdbc:mysql://localhost:3306/airportdb";
                     String username = "root";
-                    String password = "siddharth";
+                    String password = "mysql@1704";
                     conn = DriverManager.getConnection(url, username, password);
                     conn.setAutoCommit(false); // Start transaction
 
@@ -507,9 +507,9 @@ public class AdminView extends JFrame {
         JPanel passengersPanel = createPanel();
         JTable passengerTable = createTable();
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             String query = "SELECT * FROM passengers";
@@ -552,14 +552,19 @@ public class AdminView extends JFrame {
 
         JTable flightsTable = createTable();
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
-            String query = "SELECT * FROM flights where is_Arriving = 1";
+            String proc = "IncomingFlights";
+            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+
+
+            // Prepare the call to the stored procedure
+            CallableStatement pstmt = conn.prepareCall(call);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = pstmt.executeQuery();
 
             flightsTable.setModel(DbUtils.resultSetToTableModel(rs));
 
@@ -598,14 +603,19 @@ public class AdminView extends JFrame {
 
         JTable flightsTable = createTable();
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
-            String query = "SELECT * FROM flights where is_Arriving = 0";
+            String proc = "ViewOutgoingFlights";
+            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+
+
+            // Prepare the call to the stored procedure
+            CallableStatement pstmt = conn.prepareCall(call);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = pstmt.executeQuery();
 
             flightsTable.setModel(DbUtils.resultSetToTableModel(rs));
 
@@ -645,7 +655,7 @@ public class AdminView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "siddharth";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetPassengersWithRedFlag";
             String call = "{call " + proc + "()}"; // Remove the searchText parameter
@@ -682,7 +692,7 @@ public class AdminView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "siddharth";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetSales";
             String call = "{call " + proc + "()}"; // Remove the searchText parameter
@@ -719,7 +729,7 @@ public class AdminView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "siddharth";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetInsecureBags";
             String call = "{call " + proc + "()}"; // Remove the searchText parameter
@@ -756,9 +766,9 @@ public class AdminView extends JFrame {
 
         JTable inventoryTable = createTable(); // Assuming createTable() method creates a JTable
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             String query = "SELECT * FROM inventory";
@@ -785,9 +795,9 @@ public class AdminView extends JFrame {
 
         JTable assetsTable = createTable(); // Assuming createTable() method creates a JTable
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             String query = "SELECT * FROM ground_assets";
@@ -814,9 +824,9 @@ public class AdminView extends JFrame {
 
         JTable airlinesTable = createTable(); // Assuming createTable() method creates a JTable
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             String query = "SELECT * FROM airlines";
@@ -843,9 +853,9 @@ public class AdminView extends JFrame {
         JTable staffTable = createTable();
 
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             String query = "SELECT * FROM staff";
@@ -886,9 +896,9 @@ public class AdminView extends JFrame {
 
     private void searchInTable(String procedure, JTable table, String searchText) {
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             // Corrected call string with procedure name and input parameter placeholder

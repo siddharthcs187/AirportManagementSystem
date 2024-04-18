@@ -91,9 +91,9 @@ public class AirlineView extends JFrame {
         JPanel flightsPanel = createPanel();
         JTable flightsTable = createTable();
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             String query = "SELECT * FROM flights WHERE IATA_Code = ?";
@@ -176,9 +176,9 @@ public class AirlineView extends JFrame {
             String flightNumber = flightNumberField.getText();
             String newStatus = (String) statusDropdown.getSelectedItem();
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:(";
+                String password = "mysql@1704";
                 Connection conn = DriverManager.getConnection(url, username, password);
 
                 String call = "{call SetStatus" + "(?, ?, ?)}";
@@ -255,9 +255,9 @@ public class AirlineView extends JFrame {
             String id = idField.getText();
             String type = (String) typeDropdown.getSelectedItem();
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:(";
+                String password = "mysql@1704";
                 Connection conn = DriverManager.getConnection(url, username, password);
 
                 String call = "{call addEquipment" + "(?, ?)}";
@@ -301,9 +301,9 @@ public class AirlineView extends JFrame {
         removeButton.addActionListener(e -> {
             String id = removeIdField.getText();
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:(";
+                String password = "mysql@1704";
                 Connection conn = DriverManager.getConnection(url, username, password);
 
                 String call = "{call removeEquipment" + "(?)}";
@@ -389,9 +389,9 @@ public class AirlineView extends JFrame {
             String lastName = lastNameField.getText();
             String role = roleField.getText();
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:(";
+                String password = "mysql@1704";
                 Connection conn = DriverManager.getConnection(url, username, password);
 
                 String call = "{call AddStaff" + "(?, ?, ?, ?)}";
@@ -436,9 +436,9 @@ public class AirlineView extends JFrame {
         removeButton.addActionListener(e -> {
             int id = Integer.parseInt(removeIdField.getText());
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:(";
+                String password = "mysql@1704";
                 Connection conn = DriverManager.getConnection(url, username, password);
 
                 String call = "{call RemoveStaff" + "(?, ?)}";
@@ -504,9 +504,9 @@ public class AirlineView extends JFrame {
             String id = idField.getText();
             String privilege = (String) privilegeDropdown.getSelectedItem();
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "dbsproject:(";
+                String password = "mysql@1704";
                 Connection conn = DriverManager.getConnection(url, username, password);
 
                 String call = "{call ChangePrivilege" + "(?, ?)}";
@@ -537,9 +537,9 @@ public class AirlineView extends JFrame {
         JPanel panel = createPanel();
         JTable table = createTable();
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+            String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             // Corrected call string with procedure name and input parameter placeholder

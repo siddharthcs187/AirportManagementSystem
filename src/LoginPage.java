@@ -91,9 +91,9 @@ public class LoginPage extends JFrame implements ActionListener {
                 break;
             case "Airlines":
                 try {
-                    String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                    String url = "jdbc:mysql://localhost:3306/airportdb";
                     String user = "root";
-                    String pass = "dbsproject:(";
+                    String pass = "mysql@1704";
                     Connection conn = DriverManager.getConnection(url, user, pass);
 
                     String query = "SELECT Airline_Name FROM airlines WHERE IATA_Code=?";
@@ -120,9 +120,9 @@ public class LoginPage extends JFrame implements ActionListener {
                 break;
             case "Passenger":
                 try {
-                    String url = "jdbc:mysql://127.0.0.1:3306/airportdb";
+                    String url = "jdbc:mysql://localhost:3306/airportdb";
                     String user = "root";
-                    String pass = "dbsproject:(";
+                    String pass = "mysql@1704";
                     Connection conn = DriverManager.getConnection(url, user, pass);
 
                     String query = "SELECT Mobile_No FROM passengers where Pass_ID="+username;

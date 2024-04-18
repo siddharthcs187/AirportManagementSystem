@@ -36,7 +36,7 @@ public class PassengerView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             // Corrected call string with procedure name and input parameter placeholder
@@ -69,7 +69,7 @@ public class PassengerView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
             // Corrected call string with procedure name and input parameter placeholder
@@ -119,7 +119,7 @@ public class PassengerView extends JFrame {
                 try{
                     String url = "jdbc:mysql://localhost:3306/airportdb";
                     String username = "root";
-                    String password = "dbsproject:(";
+                    String password = "mysql@1704";
                     Connection conn = DriverManager.getConnection(url, username, password);
 
                     String procedure = "InsertShoppingOrder";
@@ -297,7 +297,7 @@ public class PassengerView extends JFrame {
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
-            String password = "dbsproject:(";
+            String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "LostBag";
             String call = "{call " + proc + "(?)}"; // Remove the searchText parameter
