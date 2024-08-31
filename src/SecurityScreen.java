@@ -15,19 +15,16 @@ public class SecurityScreen extends JFrame implements ActionListener {
     private JButton flagBagButton, unflagBagButton, flagPassengerButton, unflagPassengerButton;
 
     public SecurityScreen() {
-        // Set the FlatLaf light theme
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (Exception ex) {
             System.err.println("Failed to initialize FlatLaf");
         }
 
-        // Create a tabbed pane with top tabs
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBackground(new Color(243, 243, 243));
         tabbedPane.setForeground(new Color(51, 51, 51));
 
-        // Create the bag panel
         JPanel bagPanel = new JPanel(new GridBagLayout());
         bagPanel.setBackground(new Color(243, 243, 243));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -78,7 +75,6 @@ public class SecurityScreen extends JFrame implements ActionListener {
         gbc.gridy = 5;
         bagPanel.add(unflagBagButton, gbc);
 
-        // Create the passenger panel
         JPanel passengerPanel = new JPanel(new GridBagLayout());
         passengerPanel.setBackground(new Color(243, 243, 243));
         gbc = new GridBagConstraints();
@@ -129,16 +125,14 @@ public class SecurityScreen extends JFrame implements ActionListener {
         gbc.gridy = 5;
         passengerPanel.add(unflagPassengerButton, gbc);
 
-        // Add panels to the tabbed pane
         tabbedPane.addTab("Bags", bagPanel);
         tabbedPane.addTab("Passengers", passengerPanel);
 
-        // Set the content pane and other window properties
         setContentPane(tabbedPane);
         setTitle("Airport Security");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
-        setLocationRelativeTo(null); // Center the window
+        setLocationRelativeTo(null); 
         setVisible(true);
     }
 
@@ -150,13 +144,13 @@ public class SecurityScreen extends JFrame implements ActionListener {
             try {
                 String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "mysql@1704"; // Modify with your actual password
+                String password = "mysql@1704"; 
 
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     String procedure = "FlagBag";
                     String call = "{call " + procedure + "(?)}";
                     try (CallableStatement pstmt = conn.prepareCall(call)) {
-                        pstmt.setInt(1, Integer.parseInt(bagIdToFlag)); // Assuming Bag ID is an integer
+                        pstmt.setInt(1, Integer.parseInt(bagIdToFlag)); 
                         pstmt.execute();
                         JOptionPane.showMessageDialog(this, "Bag flagged successfully.");
                     }
@@ -175,13 +169,13 @@ public class SecurityScreen extends JFrame implements ActionListener {
             try {
                 String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "mysql@1704"; // Modify with your actual password
+                String password = "mysql@1704"; 
 
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     String procedure = "unFlagBag";
                     String call = "{call " + procedure + "(?)}";
                     try (CallableStatement pstmt = conn.prepareCall(call)) {
-                        pstmt.setInt(1, Integer.parseInt(bagIdToUnflag)); // Assuming Bag ID is an integer
+                        pstmt.setInt(1, Integer.parseInt(bagIdToUnflag)); 
                         pstmt.execute();
                         JOptionPane.showMessageDialog(this, "Bag unflagged successfully.");
                     }
@@ -196,17 +190,15 @@ public class SecurityScreen extends JFrame implements ActionListener {
         }
         else if (e.getSource() == flagPassengerButton) {
             String passengerIdToFlag = passengerIdField1.getText();
-            // Flag Passenger Logic Here
-            // Example JDBC code to call the "FlagPassenger" stored procedure
             try {
                 String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "mysql@1704"; // Modify with your actual password
+                String password = "mysql@1704"; 
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     String procedure = "FlagPassenger";
                     String call = "{call " + procedure + "(?)}";
                     try (CallableStatement pstmt = conn.prepareCall(call)) {
-                        pstmt.setInt(1, Integer.parseInt(passengerIdToFlag)); // Assuming Passenger ID is an integer
+                        pstmt.setInt(1, Integer.parseInt(passengerIdToFlag)); 
                         pstmt.execute();
                         JOptionPane.showMessageDialog(this, "Passenger flagged successfully.");
                     }
@@ -221,17 +213,15 @@ public class SecurityScreen extends JFrame implements ActionListener {
         }
         else if (e.getSource() == unflagPassengerButton) {
             String passengerIdToUnflag = passengerIdField2.getText();
-            // Unflag Passenger Logic Here
-            // Example JDBC code to call the "UnflagPassenger" stored procedure
             try {
                 String url = "jdbc:mysql://localhost:3306/airportdb";
                 String username = "root";
-                String password = "mysql@1704"; // Modify with your actual password
+                String password = "mysql@1704"; 
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     String procedure = "unFlagPassenger";
                     String call = "{call " + procedure + "(?)}";
                     try (CallableStatement pstmt = conn.prepareCall(call)) {
-                        pstmt.setInt(1, Integer.parseInt(passengerIdToUnflag)); // Assuming Passenger ID is an integer
+                        pstmt.setInt(1, Integer.parseInt(passengerIdToUnflag)); 
                         pstmt.execute();
                         JOptionPane.showMessageDialog(this, "Passenger unflagged successfully.");
                     }

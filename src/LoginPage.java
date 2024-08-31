@@ -13,23 +13,20 @@ public class LoginPage extends JFrame implements ActionListener {
     private JComboBox<String> viewSelector;
 
     public LoginPage() {
-        // Set the FlatDarkLaf look and feel
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception ex) {
             System.err.println("Failed to initialize FlatDarkLaf look and feel");
         }
 
-        // Set up the frame
         setTitle("Airport Management System - Login");
         setSize(300, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the frame
+        setLocationRelativeTo(null); 
         JPanel contentPane = new JPanel(new GridLayout(4, 2, 10, 10));
-        contentPane.setBackground(new Color(60, 63, 65)); // Set a dark background color
+        contentPane.setBackground(new Color(60, 63, 65)); 
         contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Create UI components
         JLabel usernameLabel = new JLabel("Username:");
         usernameField = new JTextField();
         JLabel passwordLabel = new JLabel("Password:");
@@ -39,7 +36,6 @@ public class LoginPage extends JFrame implements ActionListener {
         JButton loginButton = new JButton("Login");
         loginButton.addActionListener(this);
 
-        // Add components to the frame
         contentPane.add(usernameLabel);
         contentPane.add(usernameField);
         contentPane.add(passwordLabel);

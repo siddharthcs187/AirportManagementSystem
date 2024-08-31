@@ -117,13 +117,11 @@ class CSVParser {
         List<Passenger> passengers = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            // Skip the header line
             br.readLine();
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
 
-                // Parse CSV data and create Passenger objects
                 Date dob = Date.valueOf(data[2]);
                 boolean redFlag = Boolean.parseBoolean(data[5]);
                 int weight = Integer.parseInt(data[6]);
@@ -141,7 +139,6 @@ class CSVParser {
             e.printStackTrace();
         }
 
-        // Print passenger details
         for (Passenger passenger : passengers) {
             System.out.println(passenger);
         }
@@ -179,21 +176,17 @@ public class AdminView extends JFrame {
             System.err.println("Failed to initialize FlatLaf");
         }
 
-        // Set up the frame
         setTitle("Airport Management System - Admin View");
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Set window to full-screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the frame
+        setLocationRelativeTo(null); 
 
-        // Create a content pane
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.setBackground(new Color(36, 36, 36));
 
-        // Create a tabbed pane with top tabs
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBackground(new Color(36, 36, 36));
         tabbedPane.setForeground(Color.WHITE);
-        // Create panels for each view
         JPanel baggagePanel = createBaggagePanel();
         JPanel passengersPanel = createPassengersPanel();
         JPanel incomingFlightsPanel = createIncomingFlightsPanel();
@@ -207,7 +200,6 @@ public class AdminView extends JFrame {
         JPanel salesPanel = createSalesPanel();
         JPanel addFlightsPanel = addFlight();
 
-        // Add panels to the tabbed pane
         tabbedPane.addTab("Baggage", baggagePanel);
         tabbedPane.addTab("Passengers", passengersPanel);
         tabbedPane.addTab("Incoming Flights", incomingFlightsPanel);
@@ -220,10 +212,8 @@ public class AdminView extends JFrame {
         tabbedPane.addTab("Flagged Bags", flaggedBagsPanel);
         tabbedPane.addTab("Sales", salesPanel);
         tabbedPane.addTab("Add Flight", addFlightsPanel);
-        // Add the tabbed pane to the content pane
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
-        // Set the content pane for the frame
         setContentPane(contentPane);
     }
 
@@ -249,7 +239,6 @@ public class AdminView extends JFrame {
             e.printStackTrace();
         }
 
-        // Add search bar components
         JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
@@ -257,11 +246,9 @@ public class AdminView extends JFrame {
         searchBarPanel.add(searchButton);
         baggagePanel.add(searchBarPanel, BorderLayout.NORTH);
 
-        // Add the JTable to a JScrollPane
         JScrollPane scrollPane = new JScrollPane(baggageTable);
         baggagePanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Attach search button listener
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -276,7 +263,6 @@ public class AdminView extends JFrame {
     private JPanel addFlight() {
         JPanel addFlightPanel = createPanel();
 
-        // Create input fields for flight details
         JTextField fileNameField = new JTextField(20);
         JTextField airlineNameField = new JTextField(20);
         JTextField flightCodeField = new JTextField(20);
@@ -288,7 +274,6 @@ public class AdminView extends JFrame {
         JTextField statusField = new JTextField(20);
         JTextField isArrivingField = new JTextField(20);
 
-        // Set maximum height for input fields
         fileNameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         airlineNameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         flightCodeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
@@ -300,7 +285,6 @@ public class AdminView extends JFrame {
         statusField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         isArrivingField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
-        // Create labels for input fields
         JLabel flightNameLabel = new JLabel("Enter Flight Name:");
         JLabel airlineNameLabel = new JLabel("Enter Airline Name:");
         JLabel flightCodeLabel = new JLabel("Enter IATA Code:");
@@ -312,16 +296,13 @@ public class AdminView extends JFrame {
         JLabel statusLabel = new JLabel("Enter Status:");
         JLabel isArrivingLabel = new JLabel("isArriving :");
 
-        // Create a button for adding the flight
         JButton addButton = new JButton("Add Flight");
 
-        // Create a layout for the panel
         GroupLayout layout = new GroupLayout(addFlightPanel);
         addFlightPanel.setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
-        // Set up the horizontal group
         GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
         hGroup.addGroup(layout.createParallelGroup()
                 .addComponent(flightNameLabel)
@@ -348,7 +329,6 @@ public class AdminView extends JFrame {
                 .addComponent(addButton));
         layout.setHorizontalGroup(hGroup);
 
-        // Set up the vertical group
         GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                 .addComponent(flightNameLabel)
@@ -383,12 +363,9 @@ public class AdminView extends JFrame {
         vGroup.addComponent(addButton);
         layout.setVerticalGroup(vGroup);
 
-        // Add action listener for the add button
-// Add action listener for the add button
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Implement your logic here for adding the flight using the input values
                 String fileName = fileNameField.getText();
                 String airlineName = airlineNameField.getText();
                 String flightCode = flightCodeField.getText();
@@ -413,9 +390,8 @@ public class AdminView extends JFrame {
                     String username = "root";
                     String password = "mysql@1704";
                     conn = DriverManager.getConnection(url, username, password);
-                    conn.setAutoCommit(false); // Start transaction
+                    conn.setAutoCommit(false); 
 
-                    // Add the flight
                     String proc = "AddFlightAndAirline";
                     String call = "{call " + proc + "(?,?,?,?,?,?,?,?,?)}";
                     PreparedStatement ps = conn.prepareStatement(call);
@@ -430,7 +406,6 @@ public class AdminView extends JFrame {
                     ps.setString(9, status);
                     ps.executeUpdate();
 
-                    // Fetch the maximum flight number
                     String getMaxFlightNoQuery = "SELECT MAX(Flight_No) AS MaxFlightNo FROM flights";
                     PreparedStatement getMaxFlightNoStmt = conn.prepareStatement(getMaxFlightNoQuery);
                     ResultSet maxFlightNoResult = getMaxFlightNoStmt.executeQuery();
@@ -441,7 +416,6 @@ public class AdminView extends JFrame {
                     maxFlightNoResult.close();
                     getMaxFlightNoStmt.close();
 
-                    // Add passengers and bags
                     String proc1 = "AddPassengerOnFlight";
                     String proc2 = "AddBag";
                     String call1 = "{call " + proc1 + "(?,?,?,?,?,?)}";
@@ -456,7 +430,6 @@ public class AdminView extends JFrame {
                         pstmt.setString(6, p.getMobileNo());
                         pstmt.executeUpdate();
 
-                        // Fetch the maximum passenger ID
                         String getMaxPassengerIDQuery = "SELECT MAX(Pass_ID) AS MaxPassengerID FROM passengers";
                         PreparedStatement getMaxPassengerIDStmt = conn.prepareStatement(getMaxPassengerIDQuery);
                         ResultSet maxPassengerIDResult = getMaxPassengerIDStmt.executeQuery();
@@ -476,12 +449,12 @@ public class AdminView extends JFrame {
                         pstmt2.executeUpdate();
                     }
 
-                    conn.commit(); // Commit transaction
+                    conn.commit(); 
                     JOptionPane.showMessageDialog(null, "Flight and passengers added successfully");
                 } catch (Exception err) {
                     try {
                         if (conn != null) {
-                            conn.rollback(); // Rollback transaction if an error occurs
+                            conn.rollback();
                         }
                     } catch (SQLException ex) {
                         ex.printStackTrace();
@@ -490,8 +463,8 @@ public class AdminView extends JFrame {
                 } finally {
                     try {
                         if (conn != null) {
-                            conn.setAutoCommit(true); // Restore auto-commit mode
-                            conn.close(); // Close connection
+                            conn.setAutoCommit(true); 
+                            conn.close(); 
                         }
                     } catch (SQLException ex) {
                         ex.printStackTrace();
@@ -525,7 +498,6 @@ public class AdminView extends JFrame {
             e.printStackTrace();
         }
 
-        // Add search bar components
         JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
@@ -558,10 +530,9 @@ public class AdminView extends JFrame {
             Connection conn = DriverManager.getConnection(url, username, password);
 
             String proc = "IncomingFlights";
-            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+            String call = "{call " + proc + "()}"; 
 
 
-            // Prepare the call to the stored procedure
             CallableStatement pstmt = conn.prepareCall(call);
             Statement stmt = conn.createStatement();
             ResultSet rs = pstmt.executeQuery();
@@ -575,7 +546,6 @@ public class AdminView extends JFrame {
             e.printStackTrace();
         }
 
-        // Add search bar components
         JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
@@ -586,7 +556,6 @@ public class AdminView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(flightsTable);
         flightsPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Attach search button listener
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -609,10 +578,9 @@ public class AdminView extends JFrame {
             Connection conn = DriverManager.getConnection(url, username, password);
 
             String proc = "ViewOutgoingFlights";
-            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+            String call = "{call " + proc + "()}"; 
 
 
-            // Prepare the call to the stored procedure
             CallableStatement pstmt = conn.prepareCall(call);
             Statement stmt = conn.createStatement();
             ResultSet rs = pstmt.executeQuery();
@@ -626,7 +594,6 @@ public class AdminView extends JFrame {
             e.printStackTrace();
         }
 
-        // Add search bar components
         JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
@@ -637,7 +604,6 @@ public class AdminView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(flightsTable);
         flightsPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Attach search button listener
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -658,10 +624,9 @@ public class AdminView extends JFrame {
             String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetPassengersWithRedFlag";
-            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+            String call = "{call " + proc + "()}"; 
 
 
-            // Prepare the call to the stored procedure
             CallableStatement pstmt = conn.prepareCall(call);
             Statement stmt = conn.createStatement();
             ResultSet rs = pstmt.executeQuery();
@@ -695,10 +660,9 @@ public class AdminView extends JFrame {
             String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetSales";
-            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+            String call = "{call " + proc + "()}";
 
 
-            // Prepare the call to the stored procedure
             CallableStatement pstmt = conn.prepareCall(call);
             Statement stmt = conn.createStatement();
             ResultSet rs = pstmt.executeQuery();
@@ -732,10 +696,9 @@ public class AdminView extends JFrame {
             String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
             String proc = "GetInsecureBags";
-            String call = "{call " + proc + "()}"; // Remove the searchText parameter
+            String call = "{call " + proc + "()}";
 
 
-            // Prepare the call to the stored procedure
             CallableStatement pstmt = conn.prepareCall(call);
             Statement stmt = conn.createStatement();
             ResultSet rs = pstmt.executeQuery();
@@ -762,9 +725,9 @@ public class AdminView extends JFrame {
 
 
     private JPanel createInventoryPanel() {
-        JPanel inventoryPanel = createPanel(); // Assuming createPanel() method creates a JPanel
+        JPanel inventoryPanel = createPanel(); 
 
-        JTable inventoryTable = createTable(); // Assuming createTable() method creates a JTable
+        JTable inventoryTable = createTable();
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
@@ -791,9 +754,9 @@ public class AdminView extends JFrame {
     }
 
     private JPanel createAssetsPanel() {
-        JPanel assetsPanel = createPanel(); // Assuming createPanel() method creates a JPanel
+        JPanel assetsPanel = createPanel();
 
-        JTable assetsTable = createTable(); // Assuming createTable() method creates a JTable
+        JTable assetsTable = createTable();
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
@@ -820,9 +783,9 @@ public class AdminView extends JFrame {
     }
 
     private JPanel createAirlinesPanel() {
-        JPanel airlinesPanel = createPanel(); // Assuming createPanel() method creates a JPanel
+        JPanel airlinesPanel = createPanel();
 
-        JTable airlinesTable = createTable(); // Assuming createTable() method creates a JTable
+        JTable airlinesTable = createTable();
         try {
             String url = "jdbc:mysql://localhost:3306/airportdb";
             String username = "root";
@@ -871,7 +834,6 @@ public class AdminView extends JFrame {
             e.printStackTrace();
         }
 
-        // Add search bar components
         JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
@@ -882,7 +844,6 @@ public class AdminView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(staffTable);
         staffPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Attach search button listener
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -901,10 +862,8 @@ public class AdminView extends JFrame {
             String password = "mysql@1704";
             Connection conn = DriverManager.getConnection(url, username, password);
 
-            // Corrected call string with procedure name and input parameter placeholder
-            String call = "{call " + procedure + "(?)}"; // Note the correct concatenation
+            String call = "{call " + procedure + "(?)}";
 
-            // Prepare the call to the stored procedure
             CallableStatement pstmt = conn.prepareCall(call);
             pstmt.setString(1, searchText);
             ResultSet rs = pstmt.executeQuery();
